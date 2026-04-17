@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obzera — AI-Driven Cloud Cost & Resource Observability</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #0a0118;
+      color: #fff;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    /* Star field */
+    .starfield {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        radial-gradient(1px 1px at 8%  12%, rgba(255,255,255,.45) 0%, transparent 100%),
+        radial-gradient(1px 1px at 22% 68%, rgba(255,255,255,.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 47% 8%,  rgba(255,255,255,.4)  0%, transparent 100%),
+        radial-gradient(1px 1px at 63% 84%, rgba(255,255,255,.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 38%, rgba(255,255,255,.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 14% 77%, rgba(255,255,255,.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 52%, rgba(255,255,255,.2)  0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,.4)  0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 92%, rgba(255,255,255,.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 93% 60%, rgba(255,255,255,.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 3%  45%, rgba(255,255,255,.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,.2)  0%, transparent 100%),
+        radial-gradient(1px 1px at 42% 74%, rgba(255,255,255,.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 18% 28%, rgba(255,255,255,.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 96% 88%, rgba(255,255,255,.4)  0%, transparent 100%);
+    }
+    /* Glow blob */
+    .glow-blob {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(14px);
+      background: rgba(10,1,24,.85);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      height: 62px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 20px; font-weight: 700; color: #fff; text-decoration: none;
+    }
+    .logo-icon {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 900; color: #fff;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 13.5px; color: rgba(255,255,255,.7); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-ghost {
+      font-size: 13.5px; color: rgba(255,255,255,.8);
+      background: none; border: none; cursor: pointer; padding: 7px 16px;
+    }
+    .btn-primary {
+      font-size: 13px; font-weight: 600; color: #fff;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      border: none; border-radius: 8px; padding: 9px 20px; cursor: pointer; transition: opacity .2s;
+    }
+    .btn-primary:hover { opacity: .88; }
+
+    /* SECTIONS */
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.35); margin-bottom: 14px; display: block;
+    }
+    h2.section-title {
+      font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -.02em; line-height: 1.15;
+    }
+    .section-sub {
+      font-size: 16px; color: rgba(255,255,255,.5); line-height: 1.65; margin-top: 12px;
+    }
+
+    /* HERO */
+    .hero { padding: 96px 24px 80px; text-align: center; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.35);
+      border-radius: 100px; padding: 6px 16px; font-size: 12.5px; color: #c4b5fd;
+      font-weight: 500; margin-bottom: 28px;
+    }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #7c3aed; }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -.03em; line-height: 1.08;
+      background: linear-gradient(135deg, #fff 40%, rgba(196,181,253,.7));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 22px;
+    }
+    .hero p {
+      font-size: 17px; color: rgba(255,255,255,.5); max-width: 560px;
+      margin: 0 auto 40px; line-height: 1.7;
+    }
+    .hero-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn-hero-primary {
+      font-size: 14px; font-weight: 600; color: #fff;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      border: none; border-radius: 10px; padding: 13px 28px; cursor: pointer; transition: opacity .2s;
+    }
+    .btn-hero-primary:hover { opacity: .9; }
+    .btn-hero-outline {
+      font-size: 14px; font-weight: 500; color: rgba(255,255,255,.8);
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px; padding: 13px 28px; cursor: pointer; transition: all .2s;
+    }
+    .btn-hero-outline:hover { border-color: rgba(255,255,255,.3); color: #fff; }
+
+    /* DASHBOARD MOCKUP */
+    .dashboard-wrap {
+      max-width: 900px; margin: 60px auto 0;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(124,58,237,.12);
+    }
+    .dashboard-bar {
+      background: rgba(255,255,255,.04);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      padding: 10px 16px; display: flex; align-items: center; gap: 7px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* USE CASES */
+    .use-cases { padding: 96px 24px; }
+    .use-cases-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px;
+    }
+    .uc-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px; padding: 32px 28px; transition: border-color .25s;
+    }
+    .uc-card:hover { border-color: rgba(124,58,237,.45); }
+    .uc-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.3);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .uc-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .uc-card p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.65; }
+
+    /* FEATURES */
+    .features { padding: 96px 24px; border-top: 1px solid rgba(255,255,255,.05); }
+    .features-header { max-width: 520px; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      margin-top: 52px; border: 1px solid rgba(255,255,255,.07); border-radius: 16px; overflow: hidden;
+    }
+    .feat-cell {
+      background: rgba(255,255,255,.02); padding: 32px 28px;
+      border-right: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: background .2s;
+    }
+    .feat-cell:hover { background: rgba(124,58,237,.07); }
+    .feat-cell:nth-child(3n) { border-right: none; }
+    .feat-cell:nth-child(4), .feat-cell:nth-child(5), .feat-cell:nth-child(6) { border-bottom: none; }
+    .feat-icon {
+      width: 40px; height: 40px; border-radius: 9px;
+      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.25);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+    }
+    .feat-cell h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .feat-cell p { font-size: 13.5px; color: rgba(255,255,255,.45); line-height: 1.6; }
+
+    /* SOLUTIONS */
+    .solutions { padding: 96px 24px; border-top: 1px solid rgba(255,255,255,.05); }
+    .solution-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; margin-top: 72px;
+    }
+    .solution-row + .solution-row { margin-top: 100px; }
+    .solution-row.reverse { direction: rtl; }
+    .solution-row.reverse > * { direction: ltr; }
+    .solution-text .tag {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: #a78bfa;
+      background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25);
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 18px;
+    }
+    .solution-text h3 {
+      font-size: clamp(24px, 3vw, 36px); font-weight: 800; letter-spacing: -.02em;
+      line-height: 1.2; margin-bottom: 16px;
+    }
+    .solution-text p { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 24px; }
+    .solution-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .solution-bullets li {
+      display: flex; gap: 10px; font-size: 14px; color: rgba(255,255,255,.65); align-items: flex-start;
+    }
+    .bullet-dot {
+      width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
+      background: rgba(124,58,237,.2); border: 1px solid rgba(124,58,237,.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .solution-visual {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.09);
+      border-radius: 16px; overflow: hidden;
+    }
+
+    /* PRICING PREVIEW */
+    .pricing-preview {
+      padding: 96px 24px; border-top: 1px solid rgba(255,255,255,.05); text-align: center;
+    }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+      max-width: 960px; margin: 52px auto 0; text-align: left;
+    }
+    .price-card {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.09);
+      border-radius: 16px; padding: 28px 24px;
+    }
+    .price-card.popular {
+      background: rgba(124,58,237,.1); border-color: rgba(124,58,237,.45);
+      position: relative;
+    }
+    .popular-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      color: #fff; padding: 4px 14px; border-radius: 100px; white-space: nowrap;
+    }
+    .price-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .price-card .tier-sub { font-size: 12.5px; color: rgba(255,255,255,.4); margin-bottom: 18px; }
+    .price-amount { font-size: 38px; font-weight: 800; letter-spacing: -.02em; line-height: 1; margin-bottom: 4px; }
+    .price-amount span { font-size: 14px; font-weight: 400; color: rgba(255,255,255,.45); }
+    .price-limit { font-size: 12px; color: rgba(255,255,255,.35); margin-bottom: 20px; }
+    .price-cta {
+      width: 100%; display: block; text-align: center; padding: 10px;
+      border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+      margin-bottom: 22px; transition: opacity .2s;
+    }
+    .price-cta:hover { opacity: .85; }
+    .price-cta.filled { background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; }
+    .price-cta.outline { background: transparent; border: 1px solid rgba(255,255,255,.18); color: #fff; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .price-features li {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: rgba(255,255,255,.65);
+    }
+    .chk {
+      width: 15px; height: 15px; flex-shrink: 0; color: #7c3aed;
+    }
+
+    /* CTA BAND */
+    .cta-band {
+      margin: 0 24px 80px; border-radius: 20px;
+      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(79,70,229,.15));
+      border: 1px solid rgba(124,58,237,.25);
+      padding: 72px 40px; text-align: center; position: relative; overflow: hidden; z-index: 1;
+    }
+    .cta-band h2 {
+      font-size: clamp(28px,4vw,48px); font-weight: 900; letter-spacing: -.03em; margin-bottom: 12px;
+    }
+    .cta-band p { font-size: 16px; color: rgba(255,255,255,.5); margin-bottom: 36px; }
+    .cta-form {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px; padding: 6px 6px 6px 18px;
+    }
+    .cta-input {
+      background: none; border: none; outline: none; color: #fff;
+      font-size: 14px; width: 240px;
+    }
+    .cta-input::placeholder { color: rgba(255,255,255,.3); }
+    .cta-submit {
+      background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff;
+      border: none; border-radius: 8px; padding: 10px 22px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .2s;
+    }
+    .cta-submit:hover { opacity: .9; }
+    .cta-note { margin-top: 12px; font-size: 12px; color: rgba(255,255,255,.3); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255,255,255,.07); padding: 56px 24px 32px; position: relative; z-index: 1;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.6fr; gap: 40px; margin-bottom: 48px;
+    }
+    .footer-brand p { font-size: 13px; color: rgba(255,255,255,.38); line-height: 1.65; margin-top: 12px; max-width: 220px; }
+    .footer-trial { font-size: 12px; color: rgba(255,255,255,.28); margin-top: 14px; }
+    .footer-col h4 {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(255,255,255,.5); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul a { font-size: 13px; color: rgba(255,255,255,.38); text-decoration: none; transition: color .2s; }
+    .footer-col ul a:hover { color: rgba(255,255,255,.8); }
+    .footer-contact p { font-size: 13px; color: rgba(255,255,255,.38); line-height: 1.8; }
+    .footer-contact a { color: rgba(255,255,255,.38); text-decoration: none; }
+    .footer-contact a:hover { color: rgba(255,255,255,.7); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.23); }
+    .socials { display: flex; gap: 16px; }
+    .socials a { color: rgba(255,255,255,.3); transition: color .2s; }
+    .socials a:hover { color: rgba(255,255,255,.7); }
+
+    /* STATS BAR */
+    .stats-bar {
+      border-top: 1px solid rgba(255,255,255,.05); border-bottom: 1px solid rgba(255,255,255,.05);
+      padding: 32px 24px;
+    }
+    .stats-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; justify-content: space-around; flex-wrap: wrap; gap: 24px;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 32px; font-weight: 900; letter-spacing: -.03em; color: #fff; }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,.4); margin-top: 4px; }
+
+    /* TRUSTED */
+    .trusted { padding: 48px 24px; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .trusted-label { text-align: center; font-size: 12px; color: rgba(255,255,255,.3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 28px; }
+    .trusted-logos {
+      display: flex; justify-content: center; align-items: center;
+      gap: 48px; flex-wrap: wrap;
+    }
+    .trust-logo { font-size: 16px; font-weight: 700; color: rgba(255,255,255,.2); letter-spacing: -.01em; }
+  </style>
+</head>
+<body>
+  <div class="starfield"></div>
+  <!-- Purple glow behind hero -->
+  <div class="glow-blob" style="width:600px;height:400px;background:rgba(124,58,237,.18);top:-100px;left:50%;transform:translateX(-50%)"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">O</div>
+        obzera
+      </a>
+      <ul class="nav-links">
+        <li><a href="#use-cases">Use-Cases</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="solutions.html">Solutions</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" onclick="window.location='contact.html'">Log in</button>
+        <button class="btn-primary" onclick="window.location='pricing.html'">Get Started</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      AI-Powered Cloud Intelligence
+    </div>
+    <h1>AI-Driven Cloud Cost &amp;<br />Resource Observability</h1>
+    <p>Optimize your cloud spending with intelligent cost analytics, resource usage insights, and predictive recommendations. Get actionable insights to reduce costs and improve efficiency.</p>
+    <div class="hero-btns">
+      <button class="btn-hero-primary" onclick="window.location='pricing.html'">Get Started Free</button>
+      <button class="btn-hero-outline" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore Features</button>
+    </div>
+
+    <!-- Dashboard SVG mockup -->
+    <div class="dashboard-wrap">
+      <div class="dashboard-bar">
+        <div class="dot" style="background:#ff5f57"></div>
+        <div class="dot" style="background:#ffbd2e"></div>
+        <div class="dot" style="background:#28c940"></div>
+        <span style="margin-left:8px;font-size:12px;color:rgba(255,255,255,.25)">Obzera Dashboard</span>
+      </div>
+      <svg width="100%" viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" style="display:block">
+        <!-- Left sidebar -->
+        <rect width="160" height="340" fill="rgba(255,255,255,.02)"/>
+        <rect x="16" y="20" width="128" height="30" rx="6" fill="rgba(124,58,237,.15)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+        <text x="32" y="40" font-size="11" fill="rgba(124,58,237,.9)" font-weight="600">Overview</text>
+        <rect x="16" y="58" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
+        <text x="32" y="76" font-size="11" fill="rgba(255,255,255,.4)">Cost Analytics</text>
+        <rect x="16" y="92" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
+        <text x="32" y="110" font-size="11" fill="rgba(255,255,255,.4)">Usage Reports</text>
+        <rect x="16" y="126" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
+        <text x="32" y="144" font-size="11" fill="rgba(255,255,255,.4)">AI Insights</text>
+        <rect x="16" y="160" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
+        <text x="32" y="178" font-size="11" fill="rgba(255,255,255,.4)">Alerts</text>
+        <rect x="16" y="194" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
+        <text x="32" y="212" font-size="11" fill="rgba(255,255,255,.4)">Security</text>
+
+        <!-- Main content -->
+        <rect x="160" width="740" height="340" fill="rgba(0,0,0,.1)"/>
+
+        <!-- Top stats -->
+        <rect x="176" y="16" width="162" height="72" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+        <text x="192" y="36" font-size="10" fill="rgba(255,255,255,.35)">TOTAL SPEND</text>
+        <text x="192" y="60" font-size="22" font-weight="800" fill="#fff">$14,280</text>
+        <text x="192" y="76" font-size="10" fill="rgba(34,197,94,.8)">↓ 18% vs last month</text>
+
+        <rect x="350" y="16" width="162" height="72" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+        <text x="366" y="36" font-size="10" fill="rgba(255,255,255,.35)">SAVINGS IDENTIFIED</text>
+        <text x="366" y="60" font-size="22" font-weight="800" fill="#7c3aed">$5,640</text>
+        <text x="366" y="76" font-size="10" fill="rgba(124,58,237,.8)">40% reduction possible</text>
+
+        <rect x="524" y="16" width="162" height="72" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+        <text x="540" y="36" font-size="10" fill="rgba(255,255,255,.35)">IDLE RESOURCES</text>
+        <text x="540" y="60" font-size="22" font-weight="800" fill="#f59e0b">12</text>
+        <text x="540" y="76" font-size="10" fill="rgba(245,158,11,.8)">3 critical alerts</text>
+
+        <rect x="698" y="16" width="144" height="72" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+        <text x="714" y="36" font-size="10" fill="rgba(255,255,255,.35)">HEALTH SCORE</text>
+        <text x="714" y="60" font-size="22" font-weight="800" fill="rgba(34,197,94,.9)">87/100</text>
+        <text x="714" y="76" font-size="10" fill="rgba(34,197,94,.6)">Good standing</text>
+
+        <!-- Chart area -->
+        <rect x="176" y="104" width="376" height="200" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+        <text x="192" y="124" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">Monthly Cloud Spend</text>
+        <!-- Grid lines -->
+        <line x1="192" y1="200" x2="536" y2="200" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <line x1="192" y1="170" x2="536" y2="170" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <line x1="192" y1="140" x2="536" y2="140" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <!-- Area fill -->
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7c3aed" stop-opacity=".3"/>
+            <stop offset="100%" stop-color="#7c3aed" stop-opacity=".02"/>
+          </linearGradient>
+        </defs>
+        <polygon points="192,200 230,185 270,190 310,165 350,172 390,148 430,155 470,132 510,138 536,125 536,220 192,220" fill="url(#chartGrad)"/>
+        <polyline points="192,200 230,185 270,190 310,165 350,172 390,148 430,155 470,132 510,138 536,125" stroke="#7c3aed" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="536" cy="125" r="4" fill="#7c3aed"/>
+        <circle cx="470" cy="132" r="3" fill="#7c3aed" fill-opacity=".6"/>
+        <!-- Labels -->
+        <text x="192" y="234" font-size="9" fill="rgba(255,255,255,.25)">Jan</text>
+        <text x="230" y="234" font-size="9" fill="rgba(255,255,255,.25)">Feb</text>
+        <text x="270" y="234" font-size="9" fill="rgba(255,255,255,.25)">Mar</text>
+        <text x="310" y="234" font-size="9" fill="rgba(255,255,255,.25)">Apr</text>
+        <text x="350" y="234" font-size="9" fill="rgba(255,255,255,.25)">May</text>
+        <text x="390" y="234" font-size="9" fill="rgba(255,255,255,.25)">Jun</text>
+        <text x="430" y="234" font-size="9" fill="rgba(255,255,255,.25)">Jul</text>
+        <text x="470" y="234" font-size="9" fill="rgba(255,255,255,.25)">Aug</text>
+        <text x="510" y="234" font-size="9" fill="rgba(255,255,255,.25)">Sep</text>
+
+        <!-- Right panel: recommendations -->
+        <rect x="568" y="104" width="272" height="200" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+        <text x="584" y="124" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">AI Recommendations</text>
+        <!-- Items -->
+        <rect x="580" y="134" width="244" height="38" rx="6" fill="rgba(124,58,237,.1)" stroke="rgba(124,58,237,.2)" stroke-width="1"/>
+        <circle cx="596" cy="153" r="5" fill="rgba(124,58,237,.6)"/>
+        <text x="608" y="148" font-size="10" font-weight="600" fill="rgba(255,255,255,.8)">Rightsize 3 EC2 instances</text>
+        <text x="608" y="162" font-size="9" fill="rgba(255,255,255,.4)">Save ~$840/mo</text>
+
+        <rect x="580" y="178" width="244" height="38" rx="6" fill="rgba(245,158,11,.06)" stroke="rgba(245,158,11,.2)" stroke-width="1"/>
+        <circle cx="596" cy="197" r="5" fill="rgba(245,158,11,.6)"/>
+        <text x="608" y="192" font-size="10" font-weight="600" fill="rgba(255,255,255,.8)">Delete 5 unused S3 buckets</text>
+        <text x="608" y="206" font-size="9" fill="rgba(255,255,255,.4)">Save ~$120/mo</text>
+
+        <rect x="580" y="222" width="244" height="38" rx="6" fill="rgba(34,197,94,.06)" stroke="rgba(34,197,94,.2)" stroke-width="1"/>
+        <circle cx="596" cy="241" r="5" fill="rgba(34,197,94,.6)"/>
+        <text x="608" y="236" font-size="10" font-weight="600" fill="rgba(255,255,255,.8)">Purchase Reserved Instances</text>
+        <text x="608" y="250" font-size="9" fill="rgba(255,255,255,.4)">Save ~$2,400/yr</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Average Cost Reduction</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Teams Onboarded</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">$2M+</div>
+        <div class="stat-label">Cloud Savings Delivered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">99.9%</div>
+        <div class="stat-label">Platform Uptime</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUSTED BY -->
+  <div class="trusted">
+    <div class="trusted-label">Trusted by teams at</div>
+    <div class="trusted-logos">
+      <div class="trust-logo">AWS Partners</div>
+      <div class="trust-logo">Google Cloud</div>
+      <div class="trust-logo">Microsoft Azure</div>
+      <div class="trust-logo">Datadog</div>
+      <div class="trust-logo">Terraform</div>
+      <div class="trust-logo">Kubernetes</div>
+    </div>
+  </div>
+
+  <!-- USE CASES -->
+  <section class="use-cases" id="use-cases">
+    <div class="container">
+      <span class="section-label">Use Cases</span>
+      <h2 class="section-title">Real problems.<br />Intelligent solutions.</h2>
+      <p class="section-sub" style="max-width:480px">See how Obzera tackles the cloud cost challenges that slow teams down.</p>
+
+      <div class="use-cases-grid">
+        <!-- UC 1 -->
+        <div class="uc-card">
+          <div class="uc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+          </div>
+          <h3>Noise-free Cloud Bills</h3>
+          <p>An e-commerce enterprise struggled with unclear AWS invoices due to uncoordinated resource deployment across teams. Obzera normalizes billing statements, identifies unused infrastructure, and consolidates insights in a unified dashboard — turning complexity into clarity.</p>
+        </div>
+        <!-- UC 2 -->
+        <div class="uc-card">
+          <div class="uc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <h3>Smart Alerts</h3>
+          <p>A technology firm faced uncontrolled cost escalation from unsupervised resource provisioning by multiple engineers. Obzera provides context-aware notifications that detect over-provisioned systems, flag anomalies in real time, and deliver step-by-step remediation guidance before bills spike.</p>
+        </div>
+        <!-- UC 3 -->
+        <div class="uc-card">
+          <div class="uc-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3>Actionable Insights</h3>
+          <p>A SaaS engineering team was overwhelmed by metrics without clarity on what to act on. Obzera converts complex multi-cloud data into guided optimization decisions — enabling teams to right-size compute, reduce storage waste, and cut response times by up to 40%.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <span class="section-label">Features</span>
+        <h2 class="section-title">Everything you need to<br />master cloud costs</h2>
+        <p class="section-sub">Six powerful capabilities working together to give your team complete control over cloud spending.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feat-cell">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+          </div>
+          <h3>Cost Analytics</h3>
+          <p>Real-time expense tracking across all cloud services with detailed breakdowns and trend analysis to spot waste instantly.</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3>Usage Insights</h3>
+          <p>Daily resource utilization reports with rightsizing recommendations — know exactly what's running and what's wasted.</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h3>AI Predictions</h3>
+          <p>Machine learning–powered forecasting for both spending and resource consumption — anticipate costs before they happen.</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Smart Recommendations</h3>
+          <p>Algorithmic suggestions for rightsizing instances, purchasing reserved capacity, and eliminating orphaned resources.</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Security Monitoring</h3>
+          <p>Continuous scanning for compliance violations and vulnerability exposure across your entire cloud infrastructure.</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <h3>Intelligent Alerts</h3>
+          <p>Context-aware notifications for cost anomalies, security concerns, and optimization opportunities — delivered before damage is done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTIONS (preview) -->
+  <section class="solutions" id="solutions-preview">
+    <div class="container">
+      <span class="section-label">Solutions</span>
+      <h2 class="section-title">Three pillars of<br />cloud intelligence</h2>
+
+      <!-- Solution 1 -->
+      <div class="solution-row">
+        <div class="solution-text">
+          <div class="tag">Cost Optimization</div>
+          <h3>Intelligent Cost Optimization</h3>
+          <p>Reduce cloud spending by up to 40% through continuous analysis and AI-driven recommendations. Obzera identifies exactly where money is being wasted and tells you precisely how to fix it.</p>
+          <ul class="solution-bullets">
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Real-time cost tracking across all services</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated rightsizing recommendations</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Reserved instance optimization</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Anomaly detection &amp; spend alerts</li>
+          </ul>
+        </div>
+        <div class="solution-visual">
+          <svg width="100%" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="480" height="300" fill="#100220"/>
+            <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Cost Breakdown</text>
+            <text x="24" y="54" font-size="11" fill="rgba(255,255,255,.3)">Current month • All services</text>
+            <!-- Bars -->
+            <rect x="24" y="80" width="50" height="160" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.35)" stroke-width="1"/>
+            <rect x="24" y="120" width="50" height="120" rx="4" fill="rgba(124,58,237,.6)"/>
+            <text x="49" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">EC2</text>
+
+            <rect x="88" y="100" width="50" height="140" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+            <rect x="88" y="150" width="50" height="90" rx="4" fill="rgba(124,58,237,.45)"/>
+            <text x="113" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">RDS</text>
+
+            <rect x="152" y="130" width="50" height="110" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.25)" stroke-width="1"/>
+            <rect x="152" y="175" width="50" height="65" rx="4" fill="rgba(124,58,237,.35)"/>
+            <text x="177" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">S3</text>
+
+            <rect x="216" y="155" width="50" height="85" rx="4" fill="rgba(124,58,237,.15)" stroke="rgba(124,58,237,.2)" stroke-width="1"/>
+            <rect x="216" y="190" width="50" height="50" rx="4" fill="rgba(124,58,237,.25)"/>
+            <text x="241" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">Lambda</text>
+
+            <rect x="280" y="170" width="50" height="70" rx="4" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.18)" stroke-width="1"/>
+            <rect x="280" y="205" width="50" height="35" rx="4" fill="rgba(124,58,237,.2)"/>
+            <text x="305" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">CloudFront</text>
+
+            <!-- Savings callout -->
+            <rect x="348" y="72" width="112" height="90" rx="8" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+            <text x="404" y="94" font-size="10" fill="rgba(255,255,255,.4)" text-anchor="middle">POTENTIAL SAVINGS</text>
+            <text x="404" y="120" font-size="24" font-weight="800" fill="#7c3aed" text-anchor="middle">$5.6K</text>
+            <text x="404" y="138" font-size="10" fill="rgba(124,58,237,.8)" text-anchor="middle">per month</text>
+
+            <rect x="348" y="176" width="112" height="44" rx="6" fill="rgba(34,197,94,.08)" stroke="rgba(34,197,94,.25)" stroke-width="1"/>
+            <text x="404" y="200" font-size="11" font-weight="600" fill="rgba(34,197,94,.9)" text-anchor="middle">40% Reduction</text>
+            <text x="404" y="214" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">achievable this quarter</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Solution 2 -->
+      <div class="solution-row reverse">
+        <div class="solution-text">
+          <div class="tag">Resource Analytics</div>
+          <h3>Resource Usage Analytics</h3>
+          <p>Gain deep visibility into utilization patterns across your entire infrastructure. Identify underutilized assets, forecast capacity needs, and make data-driven decisions about resource allocation.</p>
+          <ul class="solution-bullets">
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Deep utilization pattern insights</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Identify underutilized &amp; idle assets</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Capacity forecasting &amp; trend reports</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Performance optimization data</li>
+          </ul>
+        </div>
+        <div class="solution-visual">
+          <svg width="100%" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="480" height="300" fill="#100220"/>
+            <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Resource Utilization</text>
+            <text x="24" y="54" font-size="11" fill="rgba(255,255,255,.3)">Last 30 days • All regions</text>
+            <!-- Line chart -->
+            <defs>
+              <linearGradient id="grad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#7c3aed" stop-opacity=".25"/>
+                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <polygon points="24,240 64,200 104,210 144,175 184,180 224,155 264,160 304,140 344,145 384,125 424,130 456,115 456,260 24,260" fill="url(#grad2)"/>
+            <polyline points="24,240 64,200 104,210 144,175 184,180 224,155 264,160 304,140 344,145 384,125 424,130 456,115" stroke="#7c3aed" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Dashed forecast -->
+            <polyline points="384,125 424,110 456,95" stroke="rgba(124,58,237,.4)" stroke-width="2" fill="none" stroke-dasharray="5 4" stroke-linecap="round"/>
+
+            <!-- Idle badge -->
+            <rect x="200" y="72" width="136" height="52" rx="8" fill="rgba(245,158,11,.1)" stroke="rgba(245,158,11,.3)" stroke-width="1"/>
+            <text x="268" y="94" font-size="10" fill="rgba(245,158,11,.7)" text-anchor="middle">IDLE RESOURCES</text>
+            <text x="268" y="114" font-size="20" font-weight="800" fill="#f59e0b" text-anchor="middle">12 instances</text>
+
+            <circle cx="304" cy="140" r="5" fill="#7c3aed"/>
+            <rect x="312" y="126" width="100" height="28" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+            <text x="362" y="143" font-size="9" fill="rgba(255,255,255,.7)" text-anchor="middle">Save $1.2K/mo here</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Solution 3 -->
+      <div class="solution-row">
+        <div class="solution-text">
+          <div class="tag">Security &amp; Compliance</div>
+          <h3>Security &amp; Compliance Monitoring</h3>
+          <p>Maintain a strong security posture with continuous scanning, automated compliance documentation, and proactive vulnerability notifications across your entire cloud footprint.</p>
+          <ul class="solution-bullets">
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Continuous security posture monitoring</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated compliance documentation</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vulnerability assessments &amp; scoring</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Proactive security notifications</li>
+          </ul>
+        </div>
+        <div class="solution-visual">
+          <svg width="100%" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="480" height="300" fill="#100220"/>
+            <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Security Overview</text>
+            <text x="24" y="54" font-size="11" fill="rgba(255,255,255,.3)">Compliance score • All accounts</text>
+            <!-- Score ring -->
+            <circle cx="100" cy="175" r="60" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="10"/>
+            <circle cx="100" cy="175" r="60" fill="none" stroke="rgba(34,197,94,.6)" stroke-width="10" stroke-dasharray="327 94" stroke-dashoffset="-82" stroke-linecap="round"/>
+            <text x="100" y="168" font-size="24" font-weight="800" fill="#fff" text-anchor="middle">87%</text>
+            <text x="100" y="185" font-size="10" fill="rgba(255,255,255,.35)" text-anchor="middle">Health Score</text>
+            <!-- Compliance checks -->
+            <rect x="180" y="72" width="276" height="200" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+            <text x="196" y="92" font-size="11" font-weight="600" fill="rgba(255,255,255,.5)">Compliance Checks</text>
+            <!-- rows -->
+            <rect x="192" y="100" width="248" height="28" rx="4" fill="rgba(34,197,94,.07)"/>
+            <circle cx="204" cy="114" r="5" fill="rgba(34,197,94,.7)"/>
+            <text x="216" y="118" font-size="10" fill="rgba(255,255,255,.7)">SOC 2 Type II — Compliant</text>
+
+            <rect x="192" y="134" width="248" height="28" rx="4" fill="rgba(34,197,94,.07)"/>
+            <circle cx="204" cy="148" r="5" fill="rgba(34,197,94,.7)"/>
+            <text x="216" y="152" font-size="10" fill="rgba(255,255,255,.7)">GDPR Data Residency — Pass</text>
+
+            <rect x="192" y="168" width="248" height="28" rx="4" fill="rgba(245,158,11,.07)"/>
+            <circle cx="204" cy="182" r="5" fill="rgba(245,158,11,.7)"/>
+            <text x="216" y="186" font-size="10" fill="rgba(255,255,255,.7)">IAM Over-Permission — Warning</text>
+
+            <rect x="192" y="202" width="248" height="28" rx="4" fill="rgba(239,68,68,.07)"/>
+            <circle cx="204" cy="216" r="5" fill="rgba(239,68,68,.7)"/>
+            <text x="216" y="220" font-size="10" fill="rgba(255,255,255,.7)">Public S3 Buckets — 2 Found</text>
+
+            <rect x="192" y="236" width="248" height="24" rx="4" fill="rgba(124,58,237,.1)"/>
+            <text x="316" y="252" font-size="10" fill="rgba(124,58,237,.9)" text-anchor="middle">View Full Report →</text>
+          </svg>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:60px">
+        <a href="solutions.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);text-decoration:none;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:500;transition:all .2s">
+          Explore All Solutions →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING PREVIEW -->
+  <section class="pricing-preview" id="pricing-preview">
+    <div class="container">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-sub">No hidden fees. Cancel anytime.</p>
+
+      <div class="pricing-grid">
+        <!-- Basic -->
+        <div class="price-card">
+          <h3>Basic</h3>
+          <div class="tier-sub">For small teams &amp; startups</div>
+          <div class="price-amount">$50 <span>/month</span></div>
+          <div class="price-limit">Up to $5K cloud spend</div>
+          <button class="price-cta outline" onclick="window.location='pricing.html'">Get Started</button>
+          <ul class="price-features">
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>1 Cloud Account</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cost Dashboard</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Idle Resource Alerts</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>3-Month Retention</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email Support</li>
+          </ul>
+        </div>
+        <!-- Professional -->
+        <div class="price-card popular">
+          <div class="popular-badge">MOST POPULAR</div>
+          <h3>Professional</h3>
+          <div class="tier-sub">For growing engineering teams</div>
+          <div class="price-amount">$150 <span>/month</span></div>
+          <div class="price-limit">$5K–$25K cloud spend</div>
+          <button class="price-cta filled" onclick="window.location='pricing.html'">Get Started</button>
+          <ul class="price-features">
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Up to 5 Cloud Accounts</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>AI Cost Recommendations</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>ML Cost Forecasting</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>12-Month Retention</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email &amp; Chat Support</li>
+          </ul>
+        </div>
+        <!-- Enterprise -->
+        <div class="price-card">
+          <h3>Enterprise</h3>
+          <div class="tier-sub">For large-scale organizations</div>
+          <div class="price-amount" style="font-size:28px">Custom <span>/month</span></div>
+          <div class="price-limit">Unlimited cloud spend</div>
+          <button class="price-cta outline" onclick="window.location='contact.html'">Contact Sales</button>
+          <ul class="price-features">
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited Accounts</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advanced AI Insights</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Custom Data Retention</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO &amp; Role-Based Access</li>
+            <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>24/7 Dedicated Support</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <a href="pricing.html" style="font-size:14px;color:rgba(255,255,255,.5);text-decoration:none">View full pricing details →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band">
+    <div class="glow-blob" style="width:400px;height:300px;background:rgba(124,58,237,.25);top:-80px;left:50%;transform:translateX(-50%)"></div>
+    <h2>Ready to optimize your cloud costs?</h2>
+    <p>Join teams using Obzera to reduce cloud spending and improve resource efficiency.</p>
+    <div>
+      <div class="cta-form">
+        <input class="cta-input" type="email" placeholder="Enter your work email" />
+        <button class="cta-submit" onclick="window.location='contact.html'">Get Started Free</button>
+      </div>
+    </div>
+    <p class="cta-note">No credit card required &nbsp;•&nbsp; 14 days free trial</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff;font-size:20px;font-weight:700">
+            <div class="logo-icon">O</div> obzera
+          </a>
+          <p>Experience the next generation of cloud cost analytics.</p>
+          <p class="footer-trial">Unlimited trial for 14 days</p>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="solutions.html">Solutions</a></li>
+            <li><a href="blogs.html">Blog</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legals</h4>
+          <ul>
+            <li><a href="#">Terms of Services</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Obzera for</h4>
+          <ul>
+            <li><a href="solutions.html">Engineering</a></li>
+            <li><a href="solutions.html">Finance</a></li>
+            <li><a href="solutions.html">Security</a></li>
+            <li><a href="solutions.html">Startups</a></li>
+          </ul>
+        </div>
+        <div class="footer-col footer-contact">
+          <h4>Get in touch</h4>
+          <p>
+            <a href="mailto:hello@obzera.ai">hello@obzera.ai</a><br/>
+            <a href="tel:+918149526674">+91 8149526674</a><br/><br/>
+            Obzera Inc.<br/>
+            Delaware, United States
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>©2024 Obzera. All rights reserved.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

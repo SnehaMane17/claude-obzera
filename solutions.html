@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solutions — Obzera</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background-color: #0a0118; color: #fff; font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    .starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image: radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.4) 0%, transparent 100%), radial-gradient(1px 1px at 35% 65%, rgba(255,255,255,.3) 0%, transparent 100%), radial-gradient(1px 1px at 60% 8%, rgba(255,255,255,.4) 0%, transparent 100%), radial-gradient(1px 1px at 85% 75%, rgba(255,255,255,.25) 0%, transparent 100%), radial-gradient(1px 1px at 20% 45%, rgba(255,255,255,.35) 0%, transparent 100%), radial-gradient(1px 1px at 75% 30%, rgba(255,255,255,.3) 0%, transparent 100%), radial-gradient(1px 1px at 50% 88%, rgba(255,255,255,.2) 0%, transparent 100%);
+    }
+    nav { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(14px); background: rgba(10,1,24,.85); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 9px; font-size: 20px; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo-icon { width: 30px; height: 30px; border-radius: 7px; background: linear-gradient(135deg,#7c3aed,#4f46e5); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 13.5px; color: rgba(255,255,255,.7); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-ghost { font-size: 13.5px; color: rgba(255,255,255,.8); background: none; border: none; cursor: pointer; padding: 7px 16px; }
+    .btn-primary { font-size: 13px; font-weight: 600; color: #fff; background: linear-gradient(135deg,#7c3aed,#5b21b6); border: none; border-radius: 8px; padding: 9px 20px; cursor: pointer; }
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 14px; display: block; }
+
+    /* HERO */
+    .page-hero { padding: 80px 24px 64px; text-align: center; }
+    .page-hero h1 { font-size: clamp(36px,5vw,60px); font-weight: 900; letter-spacing: -.03em; line-height: 1.1; margin-bottom: 18px; background: linear-gradient(135deg,#fff 40%,rgba(196,181,253,.7)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .page-hero p { font-size: 17px; color: rgba(255,255,255,.5); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+    /* AUDIENCE TABS */
+    .audience-tabs { padding: 0 24px 72px; }
+    .tab-nav { display: flex; justify-content: center; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
+    .tab-btn { font-size: 13.5px; font-weight: 500; padding: 9px 22px; border-radius: 100px; border: 1px solid rgba(255,255,255,.14); background: transparent; color: rgba(255,255,255,.6); cursor: pointer; transition: all .2s; }
+    .tab-btn:hover { border-color: rgba(255,255,255,.3); color: #fff; }
+    .tab-btn.active { background: rgba(124,58,237,.2); border-color: rgba(124,58,237,.55); color: #c4b5fd; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* AUDIENCE CARD */
+    .audience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .aud-text .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #a78bfa; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25); padding: 4px 12px; border-radius: 100px; margin-bottom: 18px; }
+    .aud-text h2 { font-size: clamp(26px,3vw,40px); font-weight: 800; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 14px; }
+    .aud-text p { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 24px; }
+    .aud-bullets { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 32px; }
+    .aud-bullets li { display: flex; gap: 10px; font-size: 14px; color: rgba(255,255,255,.65); align-items: flex-start; }
+    .blt { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; background: rgba(124,58,237,.2); border: 1px solid rgba(124,58,237,.4); display: flex; align-items: center; justify-content: center; }
+    .aud-cta { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; padding: 12px 26px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .2s; border: none; cursor: pointer; }
+    .aud-cta:hover { opacity: .88; }
+    .aud-visual { background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow: hidden; }
+
+    /* 3 SOLUTIONS DEEP DIVE */
+    .solutions-deep { padding: 80px 24px; border-top: 1px solid rgba(255,255,255,.05); }
+    .sol-row { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; margin-bottom: 100px; }
+    .sol-row.rev { direction: rtl; }
+    .sol-row.rev > * { direction: ltr; }
+    .sol-text .stag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #a78bfa; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25); padding: 4px 12px; border-radius: 100px; margin-bottom: 18px; }
+    .sol-text h3 { font-size: clamp(24px,2.5vw,34px); font-weight: 800; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 14px; }
+    .sol-text p { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 22px; }
+    .sol-stat { display: inline-flex; align-items: center; gap: 10px; background: rgba(124,58,237,.1); border: 1px solid rgba(124,58,237,.3); border-radius: 12px; padding: 12px 20px; margin-bottom: 24px; }
+    .sol-stat-num { font-size: 26px; font-weight: 800; color: #a78bfa; }
+    .sol-stat-label { font-size: 13px; color: rgba(255,255,255,.5); }
+    .sol-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .sol-list li { display: flex; gap: 10px; font-size: 14px; color: rgba(255,255,255,.65); align-items: flex-start; }
+    .sol-vis { background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow: hidden; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid rgba(255,255,255,.07); padding: 56px 24px 32px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.6fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 13px; color: rgba(255,255,255,.38); line-height: 1.65; margin-top: 12px; max-width: 220px; }
+    .footer-trial { font-size: 12px; color: rgba(255,255,255,.28); margin-top: 14px; }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul a { font-size: 13px; color: rgba(255,255,255,.38); text-decoration: none; transition: color .2s; }
+    .footer-col ul a:hover { color: rgba(255,255,255,.8); }
+    .footer-contact p, .footer-contact a { font-size: 13px; color: rgba(255,255,255,.38); line-height: 1.8; text-decoration: none; }
+    .footer-contact a:hover { color: rgba(255,255,255,.7); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.23); }
+    .socials { display: flex; gap: 16px; }
+    .socials a { color: rgba(255,255,255,.3); transition: color .2s; }
+    .socials a:hover { color: rgba(255,255,255,.7); }
+  </style>
+</head>
+<body>
+  <div class="starfield"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">O</div>obzera</a>
+      <ul class="nav-links">
+        <li><a href="index.html#use-cases">Use-Cases</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="solutions.html" class="active">Solutions</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" onclick="window.location='contact.html'">Log in</button>
+        <button class="btn-primary" onclick="window.location='pricing.html'">Get Started</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <span class="section-label">Solutions</span>
+    <h1>Built for every<br />cloud team</h1>
+    <p>Whether you're an engineer optimizing infrastructure, a finance lead managing budgets, or a security team ensuring compliance — Obzera has a solution tailored for you.</p>
+  </section>
+
+  <!-- AUDIENCE TABS -->
+  <section class="audience-tabs">
+    <div class="container">
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="showTab('engineering')">Engineering Teams</button>
+        <button class="tab-btn" onclick="showTab('finance')">Finance Teams</button>
+        <button class="tab-btn" onclick="showTab('security')">Security Teams</button>
+        <button class="tab-btn" onclick="showTab('enterprise')">Large Enterprises</button>
+      </div>
+
+      <!-- Engineering -->
+      <div class="tab-content active" id="tab-engineering">
+        <div class="audience-grid">
+          <div class="aud-text">
+            <div class="tag">Engineering Teams</div>
+            <h2>Stop wasting cycles on cloud cost firefighting</h2>
+            <p>Obzera gives DevOps and engineering teams complete visibility into what's running and what it costs — so you can ship faster and spend smarter. Automated rightsizing recommendations mean less time guessing, more time building.</p>
+            <ul class="aud-bullets">
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Real-time resource utilization visibility</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>AI-powered rightsizing suggestions for EC2, RDS, and more</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Anomaly alerts before spend spirals out of control</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Daily end-of-day usage reports for your team</li>
+            </ul>
+            <button class="aud-cta" onclick="window.location='pricing.html'">Start Free Trial</button>
+          </div>
+          <div class="aud-visual">
+            <svg width="100%" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="520" height="340" fill="#100220"/>
+              <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Infrastructure Overview</text>
+              <text x="24" y="54" font-size="11" fill="rgba(255,255,255,.3)">Live • All regions • 47 resources</text>
+              <rect x="24" y="68" width="472" height="240" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+              <!-- Service rows -->
+              <text x="40" y="98" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">Service</text>
+              <text x="200" y="98" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">Utilization</text>
+              <text x="340" y="98" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">Monthly Cost</text>
+              <text x="440" y="98" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">Action</text>
+              <line x1="40" y1="106" x2="480" y2="106" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+
+              <text x="40" y="128" font-size="11" fill="rgba(255,255,255,.7)">EC2 — m5.2xlarge (x8)</text>
+              <rect x="200" y="118" width="100" height="10" rx="5" fill="rgba(255,255,255,.06)"/>
+              <rect x="200" y="118" width="38" height="10" rx="5" fill="rgba(245,158,11,.6)"/>
+              <text x="310" y="128" font-size="10" fill="rgba(245,158,11,.8)">38%</text>
+              <text x="340" y="128" font-size="11" fill="rgba(255,255,255,.6)">$4,240</text>
+              <text x="440" y="128" font-size="10" fill="#a78bfa">Rightsize →</text>
+
+              <text x="40" y="158" font-size="11" fill="rgba(255,255,255,.7)">RDS — db.r5.large (x3)</text>
+              <rect x="200" y="148" width="100" height="10" rx="5" fill="rgba(255,255,255,.06)"/>
+              <rect x="200" y="148" width="72" height="10" rx="5" fill="rgba(34,197,94,.5)"/>
+              <text x="310" y="158" font-size="10" fill="rgba(34,197,94,.8)">72%</text>
+              <text x="340" y="158" font-size="11" fill="rgba(255,255,255,.6)">$1,860</text>
+              <text x="440" y="158" font-size="10" fill="rgba(255,255,255,.3)">Optimal</text>
+
+              <text x="40" y="188" font-size="11" fill="rgba(255,255,255,.7)">S3 — 142 buckets</text>
+              <rect x="200" y="178" width="100" height="10" rx="5" fill="rgba(255,255,255,.06)"/>
+              <rect x="200" y="178" width="18" height="10" rx="5" fill="rgba(239,68,68,.6)"/>
+              <text x="310" y="188" font-size="10" fill="rgba(239,68,68,.8)">18%</text>
+              <text x="340" y="188" font-size="11" fill="rgba(255,255,255,.6)">$620</text>
+              <text x="440" y="188" font-size="10" fill="#a78bfa">Clean up →</text>
+
+              <text x="40" y="218" font-size="11" fill="rgba(255,255,255,.7)">Lambda — 1,240 fns</text>
+              <rect x="200" y="208" width="100" height="10" rx="5" fill="rgba(255,255,255,.06)"/>
+              <rect x="200" y="208" width="85" height="10" rx="5" fill="rgba(34,197,94,.5)"/>
+              <text x="310" y="218" font-size="10" fill="rgba(34,197,94,.8)">85%</text>
+              <text x="340" y="218" font-size="11" fill="rgba(255,255,255,.6)">$340</text>
+              <text x="440" y="218" font-size="10" fill="rgba(255,255,255,.3)">Optimal</text>
+
+              <text x="40" y="248" font-size="11" fill="rgba(255,255,255,.7)">CloudFront</text>
+              <rect x="200" y="238" width="100" height="10" rx="5" fill="rgba(255,255,255,.06)"/>
+              <rect x="200" y="238" width="60" height="10" rx="5" fill="rgba(34,197,94,.4)"/>
+              <text x="310" y="248" font-size="10" fill="rgba(34,197,94,.7)">60%</text>
+              <text x="340" y="248" font-size="11" fill="rgba(255,255,255,.6)">$180</text>
+              <text x="440" y="248" font-size="10" fill="rgba(255,255,255,.3)">Optimal</text>
+
+              <rect x="24" y="288" width="472" height="36" rx="6" fill="rgba(124,58,237,.1)" stroke="rgba(124,58,237,.25)" stroke-width="1"/>
+              <text x="270" y="310" font-size="11" font-weight="600" fill="#a78bfa" text-anchor="middle">💡 AI Recommendation: Rightsize EC2 → save $840/mo</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance -->
+      <div class="tab-content" id="tab-finance">
+        <div class="audience-grid">
+          <div class="aud-text">
+            <div class="tag">Finance Teams</div>
+            <h2>Full cloud budget control — in one place</h2>
+            <p>Obzera gives finance and FinOps teams the clarity they need to forecast cloud spend, allocate costs by team or project, and ensure budgets are never silently exceeded. No more surprise invoices.</p>
+            <ul class="aud-bullets">
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Budget forecasting with ML accuracy</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Cost allocation by team, project, or tag</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated monthly cost reports and exports</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Budget threshold alerts before overspend</li>
+            </ul>
+            <button class="aud-cta" onclick="window.location='pricing.html'">Start Free Trial</button>
+          </div>
+          <div class="aud-visual">
+            <svg width="100%" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="520" height="340" fill="#100220"/>
+              <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Budget Overview — Q4 2024</text>
+              <rect x="24" y="56" width="220" height="80" rx="8" fill="rgba(124,58,237,.1)" stroke="rgba(124,58,237,.25)" stroke-width="1"/>
+              <text x="44" y="78" font-size="10" fill="rgba(255,255,255,.4)">TOTAL BUDGET</text>
+              <text x="44" y="102" font-size="26" font-weight="800" fill="#fff">$45,000</text>
+              <text x="44" y="120" font-size="10" fill="rgba(255,255,255,.35)">Q4 allocated spend</text>
+              <rect x="260" y="56" width="236" height="80" rx="8" fill="rgba(34,197,94,.07)" stroke="rgba(34,197,94,.2)" stroke-width="1"/>
+              <text x="280" y="78" font-size="10" fill="rgba(255,255,255,.4)">SPENT TO DATE</text>
+              <text x="280" y="102" font-size="26" font-weight="800" fill="rgba(34,197,94,.9)">$28,420</text>
+              <text x="280" y="120" font-size="10" fill="rgba(34,197,94,.6)">63% of budget used</text>
+              <!-- Progress bar -->
+              <rect x="24" y="152" width="472" height="12" rx="6" fill="rgba(255,255,255,.06)"/>
+              <rect x="24" y="152" width="297" height="12" rx="6" fill="rgba(34,197,94,.5)"/>
+              <text x="24" y="180" font-size="10" fill="rgba(255,255,255,.3)">Jan</text>
+              <text x="200" y="180" font-size="10" fill="rgba(255,255,255,.3)" text-anchor="middle">Today</text>
+              <text x="496" y="180" font-size="10" fill="rgba(255,255,255,.3)" text-anchor="end">Dec 31</text>
+              <!-- By team -->
+              <text x="24" y="208" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">Cost by Team</text>
+              <rect x="24" y="216" width="136" height="30" rx="4" fill="rgba(255,255,255,.03)"/>
+              <text x="34" y="235" font-size="10" fill="rgba(255,255,255,.6)">Platform</text>
+              <text x="150" y="235" font-size="10" fill="#a78bfa" text-anchor="end">$12,840</text>
+              <rect x="24" y="252" width="136" height="30" rx="4" fill="rgba(255,255,255,.03)"/>
+              <text x="34" y="271" font-size="10" fill="rgba(255,255,255,.6)">Data</text>
+              <text x="150" y="271" font-size="10" fill="#a78bfa" text-anchor="end">$8,200</text>
+              <rect x="24" y="288" width="136" height="30" rx="4" fill="rgba(255,255,255,.03)"/>
+              <text x="34" y="307" font-size="10" fill="rgba(255,255,255,.6)">Frontend</text>
+              <text x="150" y="307" font-size="10" fill="#a78bfa" text-anchor="end">$4,380</text>
+              <!-- Forecast -->
+              <rect x="280" y="198" width="216" height="120" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+              <text x="296" y="218" font-size="11" font-weight="600" fill="rgba(255,255,255,.5)">ML Forecast</text>
+              <text x="388" y="252" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">$44,200</text>
+              <text x="388" y="268" font-size="10" fill="rgba(34,197,94,.7)" text-anchor="middle">$800 under budget ✓</text>
+              <text x="388" y="296" font-size="9" fill="rgba(255,255,255,.25)" text-anchor="middle">Predicted end-of-quarter spend</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="tab-content" id="tab-security">
+        <div class="audience-grid">
+          <div class="aud-text">
+            <div class="tag">Security Teams</div>
+            <h2>Cloud security posture — always on</h2>
+            <p>Obzera continuously scans your cloud environment for vulnerabilities, misconfigurations, and compliance gaps — then delivers actionable remediation steps before issues become incidents.</p>
+            <ul class="aud-bullets">
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Continuous security posture monitoring</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated compliance docs (SOC2, GDPR, HIPAA)</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vulnerability assessment scoring</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Proactive security notifications with remediation</li>
+            </ul>
+            <button class="aud-cta" onclick="window.location='pricing.html'">Start Free Trial</button>
+          </div>
+          <div class="aud-visual">
+            <svg width="100%" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="520" height="340" fill="#100220"/>
+              <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Security Posture Dashboard</text>
+              <circle cx="100" cy="170" r="68" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="12"/>
+              <circle cx="100" cy="170" r="68" fill="none" stroke="rgba(34,197,94,.6)" stroke-width="12" stroke-dasharray="370 97" stroke-dashoffset="-97" stroke-linecap="round"/>
+              <text x="100" y="163" font-size="26" font-weight="900" fill="#fff" text-anchor="middle">87</text>
+              <text x="100" y="180" font-size="10" fill="rgba(255,255,255,.35)" text-anchor="middle">Health Score</text>
+              <text x="100" y="252" font-size="10" fill="rgba(34,197,94,.7)" text-anchor="middle">Good Standing</text>
+              <rect x="196" y="56" width="300" height="260" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+              <text x="212" y="78" font-size="11" font-weight="600" fill="rgba(255,255,255,.55)">Compliance Checks</text>
+              <rect x="208" y="86" width="272" height="30" rx="4" fill="rgba(34,197,94,.07)"/>
+              <circle cx="220" cy="101" r="5" fill="rgba(34,197,94,.7)"/>
+              <text x="232" y="105" font-size="10" fill="rgba(255,255,255,.75)">SOC 2 Type II — Compliant</text>
+              <rect x="208" y="122" width="272" height="30" rx="4" fill="rgba(34,197,94,.07)"/>
+              <circle cx="220" cy="137" r="5" fill="rgba(34,197,94,.7)"/>
+              <text x="232" y="141" font-size="10" fill="rgba(255,255,255,.75)">GDPR Data Residency — Pass</text>
+              <rect x="208" y="158" width="272" height="30" rx="4" fill="rgba(34,197,94,.07)"/>
+              <circle cx="220" cy="173" r="5" fill="rgba(34,197,94,.7)"/>
+              <text x="232" y="177" font-size="10" fill="rgba(255,255,255,.75)">PCI DSS — Compliant</text>
+              <rect x="208" y="194" width="272" height="30" rx="4" fill="rgba(245,158,11,.07)"/>
+              <circle cx="220" cy="209" r="5" fill="rgba(245,158,11,.7)"/>
+              <text x="232" y="213" font-size="10" fill="rgba(255,255,255,.75)">IAM Over-Permission — Warning</text>
+              <rect x="208" y="230" width="272" height="30" rx="4" fill="rgba(239,68,68,.07)"/>
+              <circle cx="220" cy="245" r="5" fill="rgba(239,68,68,.7)"/>
+              <text x="232" y="249" font-size="10" fill="rgba(255,255,255,.75)">Public S3 Buckets — 2 Found</text>
+              <rect x="208" y="266" width="272" height="28" rx="4" fill="rgba(124,58,237,.1)"/>
+              <text x="344" y="284" font-size="10" fill="rgba(124,58,237,.9)" text-anchor="middle">View Remediation Steps →</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="tab-content" id="tab-enterprise">
+        <div class="audience-grid">
+          <div class="aud-text">
+            <div class="tag">Large Enterprises</div>
+            <h2>Enterprise-grade cloud intelligence at scale</h2>
+            <p>For organizations managing millions in cloud spend across multiple accounts and providers, Obzera delivers the deep observability and control your business demands — with SSO, RBAC, and custom SLAs.</p>
+            <ul class="aud-bullets">
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Multi-cloud, multi-account unified dashboard</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>SSO integration and role-based access control</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Custom data retention and SLA guarantees</li>
+              <li><div class="blt"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>24/7 dedicated support and success manager</li>
+            </ul>
+            <button class="aud-cta" onclick="window.location='contact.html'">Contact Sales</button>
+          </div>
+          <div class="aud-visual">
+            <svg width="100%" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+              <rect width="520" height="340" fill="#100220"/>
+              <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Multi-Cloud Overview</text>
+              <text x="24" y="54" font-size="11" fill="rgba(255,255,255,.3)">3 providers • 12 accounts • $2.4M/yr</text>
+              <rect x="24" y="68" width="148" height="88" rx="8" fill="rgba(255,153,0,.08)" stroke="rgba(255,153,0,.25)" stroke-width="1"/>
+              <text x="98" y="90" font-size="11" font-weight="700" fill="rgba(255,153,0,.9)" text-anchor="middle">AWS</text>
+              <text x="98" y="114" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">$1.4M</text>
+              <text x="98" y="130" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">58% of total</text>
+              <rect x="186" y="68" width="148" height="88" rx="8" fill="rgba(66,133,244,.08)" stroke="rgba(66,133,244,.25)" stroke-width="1"/>
+              <text x="260" y="90" font-size="11" font-weight="700" fill="rgba(66,133,244,.9)" text-anchor="middle">GCP</text>
+              <text x="260" y="114" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">$620K</text>
+              <text x="260" y="130" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">26% of total</text>
+              <rect x="348" y="68" width="148" height="88" rx="8" fill="rgba(0,120,212,.08)" stroke="rgba(0,120,212,.25)" stroke-width="1"/>
+              <text x="422" y="90" font-size="11" font-weight="700" fill="rgba(0,120,212,.9)" text-anchor="middle">Azure</text>
+              <text x="422" y="114" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">$380K</text>
+              <text x="422" y="130" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">16% of total</text>
+              <!-- Trend -->
+              <text x="24" y="180" font-size="11" font-weight="600" fill="rgba(255,255,255,.5)">12-Month Spend Trend</text>
+              <defs><linearGradient id="egrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7c3aed" stop-opacity=".2"/><stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/></linearGradient></defs>
+              <polygon points="24,310 64,295 104,288 144,278 184,270 224,260 264,252 304,244 344,236 384,228 424,220 464,212 496,205 496,320 24,320" fill="url(#egrad)"/>
+              <polyline points="24,310 64,295 104,288 144,278 184,270 224,260 264,252 304,244 344,236 384,228 424,220 464,212 496,205" stroke="#7c3aed" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="496" cy="205" r="4" fill="#7c3aed"/>
+              <rect x="370" y="190" width="120" height="28" rx="4" fill="rgba(34,197,94,.08)" stroke="rgba(34,197,94,.2)" stroke-width="1"/>
+              <text x="430" y="208" font-size="9" font-weight="600" fill="rgba(34,197,94,.9)" text-anchor="middle">↓ 18% YoY savings</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div style="margin: 0 24px 80px; border-radius: 20px; background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(79,70,229,.15)); border: 1px solid rgba(124,58,237,.25); padding: 72px 40px; text-align: center; position: relative; z-index: 1; overflow: hidden;">
+    <h2 style="font-size: clamp(28px,4vw,46px); font-weight: 900; letter-spacing: -.03em; margin-bottom: 12px;">Ready to optimize your cloud costs?</h2>
+    <p style="font-size: 16px; color: rgba(255,255,255,.5); margin-bottom: 32px;">Join teams using Obzera to reduce cloud spending and improve resource efficiency.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <button onclick="window.location='pricing.html'" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer">Get Started Free</button>
+      <button onclick="window.location='contact.html'" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);border-radius:10px;padding:13px 28px;font-size:14px;font-weight:500;cursor:pointer">Talk to Sales</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff;font-size:20px;font-weight:700"><div class="logo-icon">O</div>obzera</a>
+          <p>Experience the next generation of cloud cost analytics.</p>
+          <p class="footer-trial">Unlimited trial for 14 days</p>
+        </div>
+        <div class="footer-col"><h4>Platform</h4><ul><li><a href="pricing.html">Pricing</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="blogs.html">Blog</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h4>Legals</h4><ul><li><a href="#">Terms of Services</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+        <div class="footer-col"><h4>Obzera for</h4><ul><li><a href="solutions.html">Engineering</a></li><li><a href="solutions.html">Finance</a></li><li><a href="solutions.html">Security</a></li><li><a href="solutions.html">Startups</a></li></ul></div>
+        <div class="footer-col footer-contact"><h4>Get in touch</h4><p><a href="mailto:hello@obzera.ai">hello@obzera.ai</a><br/><a href="tel:+918149526674">+91 8149526674</a><br/><br/>Obzera Inc.<br/>Delaware, United States</p></div>
+      </div>
+      <div class="footer-bottom">
+        <p>©2024 Obzera. All rights reserved.</p>
+        <div class="socials">
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function showTab(name) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

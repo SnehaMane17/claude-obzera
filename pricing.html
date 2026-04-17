@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pricing — Obzera</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background-color: #0a0118; color: #fff; font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    .starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image: radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.4) 0%, transparent 100%), radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,.3) 0%, transparent 100%), radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,.4) 0%, transparent 100%), radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,.25) 0%, transparent 100%), radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,.35) 0%, transparent 100%), radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,.3) 0%, transparent 100%), radial-gradient(1px 1px at 45% 50%, rgba(255,255,255,.2) 0%, transparent 100%), radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,.4) 0%, transparent 100%), radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,.3) 0%, transparent 100%), radial-gradient(1px 1px at 60% 90%, rgba(255,255,255,.25) 0%, transparent 100%);
+    }
+    nav { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(14px); background: rgba(10,1,24,.85); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 9px; font-size: 20px; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo-icon { width: 30px; height: 30px; border-radius: 7px; background: linear-gradient(135deg,#7c3aed,#4f46e5); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 13.5px; color: rgba(255,255,255,.7); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-ghost { font-size: 13.5px; color: rgba(255,255,255,.8); background: none; border: none; cursor: pointer; padding: 7px 16px; }
+    .btn-primary { font-size: 13px; font-weight: 600; color: #fff; background: linear-gradient(135deg,#7c3aed,#5b21b6); border: none; border-radius: 8px; padding: 9px 20px; cursor: pointer; transition: opacity .2s; }
+    .btn-primary:hover { opacity: .88; }
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* HERO */
+    .pricing-hero { padding: 72px 24px 48px; text-align: center; }
+    .trial-badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 20px; }
+    .pricing-hero h1 { font-size: clamp(40px,6vw,64px); font-weight: 800; letter-spacing: -.02em; margin-bottom: 16px; }
+    .pricing-hero p { font-size: 16px; color: rgba(255,255,255,.5); max-width: 460px; margin: 0 auto 36px; line-height: 1.65; }
+    .toggle-wrapper { display: inline-flex; align-items: center; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 100px; padding: 4px; gap: 4px; }
+    .toggle-btn { font-size: 13px; font-weight: 500; padding: 7px 22px; border-radius: 100px; border: none; cursor: pointer; transition: all .2s; }
+    .toggle-btn.active { background: #fff; color: #0a0118; }
+    .toggle-btn.inactive { background: transparent; color: rgba(255,255,255,.55); }
+    .save-badge { display: inline-flex; align-items: center; background: rgba(124,58,237,.35); color: #c4b5fd; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; margin-left: 6px; }
+
+    /* CARDS */
+    .pricing-section { padding: 0 24px 80px; position: relative; z-index: 1; }
+    .pricing-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; align-items: start; }
+    .pricing-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 30px 26px; position: relative; }
+    .pricing-card.featured { background: rgba(124,58,237,.1); border-color: rgba(124,58,237,.5); transform: translateY(-8px); }
+    .card-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 5px 15px; border-radius: 100px; white-space: nowrap; }
+    .card-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .card-tagline { font-size: 13px; color: rgba(255,255,255,.4); margin-bottom: 22px; }
+    .card-price { font-size: 40px; font-weight: 800; letter-spacing: -.02em; line-height: 1; margin-bottom: 6px; }
+    .card-price span { font-size: 14px; font-weight: 400; color: rgba(255,255,255,.45); }
+    .card-price-note { font-size: 12px; color: rgba(255,255,255,.38); margin-bottom: 22px; }
+    .card-cta { display: block; text-align: center; font-size: 14px; font-weight: 600; padding: 11px; border-radius: 9px; cursor: pointer; border: none; width: 100%; margin-bottom: 26px; transition: opacity .2s; text-decoration: none; }
+    .card-cta:hover { opacity: .85; }
+    .card-cta.outlined { background: transparent; border: 1px solid rgba(255,255,255,.22); color: #fff; }
+    .card-cta.filled { background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; }
+    .feature-section-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.32); margin-bottom: 11px; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px; }
+    .feature-list li { display: flex; align-items: center; gap: 9px; font-size: 13px; color: rgba(255,255,255,.68); }
+    .chk { width: 15px; height: 15px; flex-shrink: 0; color: #7c3aed; }
+    .divider { height: 1px; background: rgba(255,255,255,.07); margin: 18px 0; }
+
+    /* LOGOS */
+    .logos-section { position: relative; z-index: 1; padding: 48px 24px 64px; border-top: 1px solid rgba(255,255,255,.05); border-bottom: 1px solid rgba(255,255,255,.05); }
+    .logos-grid { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
+    .logo-item { font-size: 17px; font-weight: 700; color: rgba(255,255,255,.22); }
+
+    /* FAQ */
+    .faq-section { position: relative; z-index: 1; padding: 80px 24px; text-align: center; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 14px; display: block; }
+    .faq-section h2 { font-size: clamp(28px,4vw,44px); font-weight: 800; letter-spacing: -.02em; margin-bottom: 10px; }
+    .faq-section .subtitle { font-size: 15px; color: rgba(255,255,255,.45); margin-bottom: 48px; }
+    .faq-section .subtitle a { color: #7c3aed; text-decoration: none; }
+    .faq-list { max-width: 720px; margin: 0 auto; text-align: left; }
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,.07); }
+    .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; cursor: pointer; font-size: 15px; font-weight: 500; color: rgba(255,255,255,.82); user-select: none; }
+    .faq-question:hover { color: #fff; }
+    .faq-plus { width: 22px; height: 22px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; color: rgba(255,255,255,.45); flex-shrink: 0; transition: transform .25s; }
+    .faq-answer { font-size: 14px; color: rgba(255,255,255,.48); line-height: 1.75; padding-bottom: 20px; display: none; }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-plus { transform: rotate(45deg); border-color: rgba(124,58,237,.5); color: #a78bfa; }
+
+    /* COMPARE TABLE */
+    .compare-section { position: relative; z-index: 1; padding: 40px 24px 80px; }
+    .compare-table { max-width: 900px; margin: 40px auto 0; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow: hidden; }
+    .ct-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; background: rgba(255,255,255,.03); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .ct-head div { padding: 18px 20px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,.7); }
+    .ct-head div:nth-child(3) { color: #a78bfa; }
+    .ct-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .ct-row:last-child { border-bottom: none; }
+    .ct-row:hover { background: rgba(255,255,255,.02); }
+    .ct-row div { padding: 14px 20px; font-size: 13px; color: rgba(255,255,255,.55); display: flex; align-items: center; }
+    .ct-row div:first-child { color: rgba(255,255,255,.75); font-weight: 500; }
+    .tick { color: #7c3aed; font-size: 15px; }
+    .cross { color: rgba(255,255,255,.2); font-size: 15px; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid rgba(255,255,255,.07); padding: 56px 24px 32px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1.6fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand p { font-size: 13px; color: rgba(255,255,255,.38); line-height: 1.65; margin-top: 12px; max-width: 220px; }
+    .footer-trial { font-size: 12px; color: rgba(255,255,255,.28); margin-top: 14px; }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul a { font-size: 13px; color: rgba(255,255,255,.38); text-decoration: none; transition: color .2s; }
+    .footer-col ul a:hover { color: rgba(255,255,255,.8); }
+    .footer-contact p { font-size: 13px; color: rgba(255,255,255,.38); line-height: 1.8; }
+    .footer-contact a { color: rgba(255,255,255,.38); text-decoration: none; }
+    .footer-contact a:hover { color: rgba(255,255,255,.7); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.23); }
+    .socials { display: flex; gap: 16px; }
+    .socials a { color: rgba(255,255,255,.3); transition: color .2s; }
+    .socials a:hover { color: rgba(255,255,255,.7); }
+  </style>
+</head>
+<body>
+  <div class="starfield"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">O</div>obzera</a>
+      <ul class="nav-links">
+        <li><a href="index.html#use-cases">Use-Cases</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="solutions.html">Solutions</a></li>
+        <li><a href="pricing.html" class="active">Pricing</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" onclick="window.location='contact.html'">Log in</button>
+        <button class="btn-primary" onclick="window.location='contact.html'">Get Started</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="pricing-hero">
+    <div class="trial-badge">TRY 14 DAYS FOR FREE!</div>
+    <h1>Transparent Pricing</h1>
+    <p>Obzera combines enterprise-grade cloud intelligence with simplicity — offering plans tailored to teams of all sizes.</p>
+    <div class="toggle-wrapper">
+      <button class="toggle-btn active" id="monthly-btn" onclick="setToggle('monthly')">Monthly</button>
+      <button class="toggle-btn inactive" id="yearly-btn" onclick="setToggle('yearly')">
+        Yearly <span class="save-badge">-20%</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="pricing-section">
+    <div class="pricing-grid">
+
+      <!-- Basic -->
+      <div class="pricing-card featured">
+        <div class="card-badge">TRY WITHOUT A CREDIT CARD</div>
+        <div class="card-name">Basic</div>
+        <div class="card-tagline">For small teams &amp; startups.</div>
+        <div class="card-price"><span id="basic-price">$50</span> <span>/month</span></div>
+        <div class="card-price-note">Up to $5K cloud spend</div>
+        <a href="contact.html" class="card-cta filled">Try for Free</a>
+
+        <div class="feature-section-label">WORKSPACE</div>
+        <ul class="feature-list">
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>1 Cloud Account</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email Support</li>
+        </ul>
+        <div class="divider"></div>
+        <div class="feature-section-label">ANALYTICS</div>
+        <ul class="feature-list">
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cost Dashboard</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Spend Breakdown</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Idle Resource Alerts</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>3-Month Data Retention</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Daily Usage Reports</li>
+        </ul>
+      </div>
+
+      <!-- Professional -->
+      <div class="pricing-card">
+        <div class="card-name">Professional</div>
+        <div class="card-tagline">Ideal for growing engineering teams.</div>
+        <div class="card-price"><span id="pro-price">$150</span> <span>/month</span></div>
+        <div class="card-price-note">$5K–$25K cloud spend</div>
+        <a href="contact.html" class="card-cta outlined">Try for Free</a>
+
+        <div class="feature-section-label">WORKSPACE</div>
+        <ul class="feature-list">
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Up to 5 Cloud Accounts</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email &amp; Chat Support</li>
+        </ul>
+        <div class="divider"></div>
+        <div class="feature-section-label">ANALYTICS</div>
+        <ul class="feature-list">
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>AI Cost Recommendations</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Rightsizing Suggestions</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Anomaly Detection</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>12-Month Data Retention</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>ML Cost Forecasting</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Security Scanning</li>
+        </ul>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div class="card-name">Enterprise</div>
+        <div class="card-tagline">Ideal for large-scale organizations.</div>
+        <div class="card-price" style="font-size:28px;padding-top:6px">Custom <span>/month</span></div>
+        <div class="card-price-note">Unlimited cloud spend</div>
+        <a href="contact.html" class="card-cta outlined">Contact Sales</a>
+
+        <div class="feature-section-label">WORKSPACE</div>
+        <ul class="feature-list">
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited Cloud Accounts</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>24/7 Dedicated Support</li>
+        </ul>
+        <div class="divider"></div>
+        <div class="feature-section-label">ANALYTICS</div>
+        <ul class="feature-list">
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advanced AI Insights</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Custom Data Retention</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Multi-Cloud Support</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Compliance Monitoring</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO &amp; Role-Based Access</li>
+          <li><svg class="chk" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="currentColor" stroke-opacity=".4"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Custom Integrations</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <section class="logos-section">
+    <div class="logos-grid">
+      <div class="logo-item">AWS</div>
+      <div class="logo-item">Google Cloud</div>
+      <div class="logo-item">Azure</div>
+      <div class="logo-item">Datadog</div>
+      <div class="logo-item">Terraform</div>
+      <div class="logo-item">Kubernetes</div>
+    </div>
+  </section>
+
+  <!-- COMPARE TABLE -->
+  <section class="compare-section">
+    <div class="container">
+      <span class="section-label" style="display:block;text-align:center;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:12px">Compare Plans</span>
+      <h2 style="text-align:center;font-size:clamp(24px,3vw,38px);font-weight:800;letter-spacing:-.02em">Feature comparison</h2>
+      <div class="compare-table">
+        <div class="ct-head">
+          <div>Feature</div>
+          <div>Basic</div>
+          <div>Professional</div>
+          <div>Enterprise</div>
+        </div>
+        <div class="ct-row"><div>Cost Dashboard</div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>Idle Resource Alerts</div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>AI Cost Recommendations</div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>ML Cost Forecasting</div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>Anomaly Detection</div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>Security Scanning</div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>Compliance Monitoring</div><div><span class="cross">—</span></div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>Multi-Cloud Support</div><div><span class="cross">—</span></div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>SSO &amp; RBAC</div><div><span class="cross">—</span></div><div><span class="cross">—</span></div><div><span class="tick">✓</span></div></div>
+        <div class="ct-row"><div>Cloud Accounts</div><div>1</div><div>Up to 5</div><div>Unlimited</div></div>
+        <div class="ct-row"><div>Data Retention</div><div>3 months</div><div>12 months</div><div>Custom</div></div>
+        <div class="ct-row"><div>Support</div><div>Email</div><div>Email &amp; Chat</div><div>24/7 Dedicated</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <span class="section-label">FAQ</span>
+    <h2>Frequently asked questions</h2>
+    <p class="subtitle">Haven't found what you're looking for? <a href="contact.html">Contact us.</a></p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Can I switch plans or cancel anytime?<div class="faq-plus">+</div></div>
+        <div class="faq-answer">Yes, you can upgrade, downgrade, or cancel at any time from your account dashboard. Changes take effect at the start of your next billing cycle with no hidden fees or penalties.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Do you have an executive plan for Enterprises?<div class="faq-plus">+</div></div>
+        <div class="faq-answer">Yes. Our Enterprise plan is fully customizable — from data retention policies and user seats to dedicated onboarding, SLA guarantees, and custom integrations. Contact our sales team to build the right package.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Do you provide post-purchase support?<div class="faq-plus">+</div></div>
+        <div class="faq-answer">All plans include email support. Professional plans add chat support. Enterprise customers receive a dedicated success manager and 24/7 priority assistance.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does Obzera offer a free trial?<div class="faq-plus">+</div></div>
+        <div class="faq-answer">Yes — start a 14-day free trial on the Basic plan with no credit card required. You get full access to all Basic features so you can see the value before committing.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Which cloud providers does Obzera support?<div class="faq-plus">+</div></div>
+        <div class="faq-answer">Obzera natively supports AWS, Google Cloud Platform, and Microsoft Azure. Multi-cloud visibility is available on Professional and Enterprise plans.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;color:#fff;font-size:20px;font-weight:700"><div class="logo-icon">O</div>obzera</a>
+          <p>Experience the next generation of cloud cost analytics.</p>
+          <p class="footer-trial">Unlimited trial for 14 days</p>
+        </div>
+        <div class="footer-col"><h4>Platform</h4><ul><li><a href="pricing.html">Pricing</a></li><li><a href="solutions.html">Solutions</a></li><li><a href="blogs.html">Blog</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h4>Legals</h4><ul><li><a href="#">Terms of Services</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+        <div class="footer-col"><h4>Obzera for</h4><ul><li><a href="solutions.html">Engineering</a></li><li><a href="solutions.html">Finance</a></li><li><a href="solutions.html">Security</a></li><li><a href="solutions.html">Startups</a></li></ul></div>
+        <div class="footer-col footer-contact"><h4>Get in touch</h4><p><a href="mailto:hello@obzera.ai">hello@obzera.ai</a><br/><a href="tel:+918149526674">+91 8149526674</a><br/><br/>Obzera Inc.<br/>Delaware, United States</p></div>
+      </div>
+      <div class="footer-bottom">
+        <p>©2024 Obzera. All rights reserved.</p>
+        <div class="socials">
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const PRICES = { basic: { monthly: '$50', yearly: '$40' }, pro: { monthly: '$150', yearly: '$120' } };
+    function setToggle(mode) {
+      document.getElementById('monthly-btn').className = 'toggle-btn ' + (mode === 'monthly' ? 'active' : 'inactive');
+      document.getElementById('yearly-btn').className = 'toggle-btn ' + (mode === 'yearly' ? 'active' : 'inactive');
+      document.getElementById('basic-price').textContent = PRICES.basic[mode];
+      document.getElementById('pro-price').textContent = PRICES.pro[mode];
+    }
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    }
+  </script>
+</body>
+</html>
