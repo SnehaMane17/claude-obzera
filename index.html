@@ -10,7 +10,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      background-color: #0a0118;
+      background-color: #0c0800;
       color: #fff;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -58,7 +58,7 @@
     }
     .logo-icon {
       width: 30px; height: 30px; border-radius: 7px;
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      background: linear-gradient(135deg, #ea580c, #c2410c);
       display: flex; align-items: center; justify-content: center;
       font-size: 15px; font-weight: 900; color: #fff;
     }
@@ -74,7 +74,7 @@
     }
     .btn-primary {
       font-size: 13px; font-weight: 600; color: #fff;
-      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      background: linear-gradient(135deg, #ea580c, #c2410c);
       border: none; border-radius: 8px; padding: 9px 20px; cursor: pointer; transition: opacity .2s;
     }
     .btn-primary:hover { opacity: .88; }
@@ -97,14 +97,14 @@
     .hero { padding: 96px 24px 80px; text-align: center; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.35);
-      border-radius: 100px; padding: 6px 16px; font-size: 12.5px; color: #c4b5fd;
+      background: rgba(234,88,12,.15); border: 1px solid rgba(234,88,12,.35);
+      border-radius: 100px; padding: 6px 16px; font-size: 12.5px; color: #fed7aa;
       font-weight: 500; margin-bottom: 28px;
     }
-    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #7c3aed; }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #ea580c; }
     .hero h1 {
       font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -.03em; line-height: 1.08;
-      background: linear-gradient(135deg, #fff 40%, rgba(196,181,253,.7));
+      background: linear-gradient(135deg, #fff 40%, rgba(253,186,116,.7));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       margin-bottom: 22px;
     }
@@ -115,7 +115,7 @@
     .hero-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
     .btn-hero-primary {
       font-size: 14px; font-weight: 600; color: #fff;
-      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      background: linear-gradient(135deg, #ea580c, #c2410c);
       border: none; border-radius: 10px; padding: 13px 28px; cursor: pointer; transition: opacity .2s;
     }
     .btn-hero-primary:hover { opacity: .9; }
@@ -132,7 +132,7 @@
       background: rgba(255,255,255,.03);
       border: 1px solid rgba(255,255,255,.1);
       border-radius: 16px; overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(124,58,237,.12);
+      box-shadow: 0 24px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(234,88,12,.12);
     }
     .dashboard-bar {
       background: rgba(255,255,255,.04);
@@ -150,10 +150,10 @@
       background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
       border-radius: 16px; padding: 32px 28px; transition: border-color .25s;
     }
-    .uc-card:hover { border-color: rgba(124,58,237,.45); }
+    .uc-card:hover { border-color: rgba(234,88,12,.45); }
     .uc-icon {
       width: 44px; height: 44px; border-radius: 10px;
-      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.3);
+      background: rgba(234,88,12,.15); border: 1px solid rgba(234,88,12,.3);
       display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
     }
     .uc-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
@@ -172,12 +172,12 @@
       border-bottom: 1px solid rgba(255,255,255,.05);
       transition: background .2s;
     }
-    .feat-cell:hover { background: rgba(124,58,237,.07); }
+    .feat-cell:hover { background: rgba(234,88,12,.07); }
     .feat-cell:nth-child(3n) { border-right: none; }
     .feat-cell:nth-child(4), .feat-cell:nth-child(5), .feat-cell:nth-child(6) { border-bottom: none; }
     .feat-icon {
       width: 40px; height: 40px; border-radius: 9px;
-      background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.25);
+      background: rgba(234,88,12,.15); border: 1px solid rgba(234,88,12,.25);
       display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
     }
     .feat-cell h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
@@ -194,8 +194,8 @@
     .solution-row.reverse > * { direction: ltr; }
     .solution-text .tag {
       display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: #a78bfa;
-      background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25);
+      text-transform: uppercase; color: #fb923c;
+      background: rgba(234,88,12,.12); border: 1px solid rgba(234,88,12,.25);
       padding: 4px 12px; border-radius: 100px; margin-bottom: 18px;
     }
     .solution-text h3 {
@@ -209,7 +209,7 @@
     }
     .bullet-dot {
       width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
-      background: rgba(124,58,237,.2); border: 1px solid rgba(124,58,237,.4);
+      background: rgba(234,88,12,.2); border: 1px solid rgba(234,88,12,.4);
       display: flex; align-items: center; justify-content: center;
     }
     .solution-visual {
@@ -230,12 +230,12 @@
       border-radius: 16px; padding: 28px 24px;
     }
     .price-card.popular {
-      background: rgba(124,58,237,.1); border-color: rgba(124,58,237,.45);
+      background: rgba(234,88,12,.1); border-color: rgba(234,88,12,.45);
       position: relative;
     }
     .popular-badge {
       position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      background: linear-gradient(135deg, #ea580c, #c2410c);
       font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
       color: #fff; padding: 4px 14px; border-radius: 100px; white-space: nowrap;
     }
@@ -250,7 +250,7 @@
       margin-bottom: 22px; transition: opacity .2s;
     }
     .price-cta:hover { opacity: .85; }
-    .price-cta.filled { background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff; }
+    .price-cta.filled { background: linear-gradient(135deg,#ea580c,#c2410c); color: #fff; }
     .price-cta.outline { background: transparent; border: 1px solid rgba(255,255,255,.18); color: #fff; }
     .price-features { list-style: none; display: flex; flex-direction: column; gap: 9px; }
     .price-features li {
@@ -258,14 +258,14 @@
       font-size: 13px; color: rgba(255,255,255,.65);
     }
     .chk {
-      width: 15px; height: 15px; flex-shrink: 0; color: #7c3aed;
+      width: 15px; height: 15px; flex-shrink: 0; color: #ea580c;
     }
 
     /* CTA BAND */
     .cta-band {
       margin: 0 24px 80px; border-radius: 20px;
-      background: linear-gradient(135deg, rgba(124,58,237,.2), rgba(79,70,229,.15));
-      border: 1px solid rgba(124,58,237,.25);
+      background: linear-gradient(135deg, rgba(234,88,12,.2), rgba(194,65,12,.15));
+      border: 1px solid rgba(234,88,12,.25);
       padding: 72px 40px; text-align: center; position: relative; overflow: hidden; z-index: 1;
     }
     .cta-band h2 {
@@ -283,7 +283,7 @@
     }
     .cta-input::placeholder { color: rgba(255,255,255,.3); }
     .cta-submit {
-      background: linear-gradient(135deg,#7c3aed,#5b21b6); color: #fff;
+      background: linear-gradient(135deg,#ea580c,#c2410c); color: #fff;
       border: none; border-radius: 8px; padding: 10px 22px;
       font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .2s;
     }
@@ -341,11 +341,12 @@
     }
     .trust-logo { font-size: 16px; font-weight: 700; color: rgba(255,255,255,.2); letter-spacing: -.01em; }
   </style>
+  <link rel="stylesheet" href="mobile.css"/>
 </head>
 <body>
   <div class="starfield"></div>
   <!-- Purple glow behind hero -->
-  <div class="glow-blob" style="width:600px;height:400px;background:rgba(124,58,237,.18);top:-100px;left:50%;transform:translateX(-50%)"></div>
+  <div class="glow-blob" style="width:600px;height:400px;background:rgba(234,88,12,.18);top:-100px;left:50%;transform:translateX(-50%)"></div>
 
   <!-- NAV -->
   <nav>
@@ -393,8 +394,8 @@
       <svg width="100%" viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" style="display:block">
         <!-- Left sidebar -->
         <rect width="160" height="340" fill="rgba(255,255,255,.02)"/>
-        <rect x="16" y="20" width="128" height="30" rx="6" fill="rgba(124,58,237,.15)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
-        <text x="32" y="40" font-size="11" fill="rgba(124,58,237,.9)" font-weight="600">Overview</text>
+        <rect x="16" y="20" width="128" height="30" rx="6" fill="rgba(234,88,12,.15)" stroke="rgba(234,88,12,.3)" stroke-width="1"/>
+        <text x="32" y="40" font-size="11" fill="rgba(234,88,12,.9)" font-weight="600">Overview</text>
         <rect x="16" y="58" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
         <text x="32" y="76" font-size="11" fill="rgba(255,255,255,.4)">Cost Analytics</text>
         <rect x="16" y="92" width="128" height="28" rx="6" fill="rgba(255,255,255,.03)"/>
@@ -417,8 +418,8 @@
 
         <rect x="350" y="16" width="162" height="72" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
         <text x="366" y="36" font-size="10" fill="rgba(255,255,255,.35)">SAVINGS IDENTIFIED</text>
-        <text x="366" y="60" font-size="22" font-weight="800" fill="#7c3aed">$5,640</text>
-        <text x="366" y="76" font-size="10" fill="rgba(124,58,237,.8)">40% reduction possible</text>
+        <text x="366" y="60" font-size="22" font-weight="800" fill="#ea580c">$5,640</text>
+        <text x="366" y="76" font-size="10" fill="rgba(234,88,12,.8)">40% reduction possible</text>
 
         <rect x="524" y="16" width="162" height="72" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
         <text x="540" y="36" font-size="10" fill="rgba(255,255,255,.35)">IDLE RESOURCES</text>
@@ -440,14 +441,14 @@
         <!-- Area fill -->
         <defs>
           <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#7c3aed" stop-opacity=".3"/>
-            <stop offset="100%" stop-color="#7c3aed" stop-opacity=".02"/>
+            <stop offset="0%" stop-color="#ea580c" stop-opacity=".3"/>
+            <stop offset="100%" stop-color="#ea580c" stop-opacity=".02"/>
           </linearGradient>
         </defs>
         <polygon points="192,200 230,185 270,190 310,165 350,172 390,148 430,155 470,132 510,138 536,125 536,220 192,220" fill="url(#chartGrad)"/>
-        <polyline points="192,200 230,185 270,190 310,165 350,172 390,148 430,155 470,132 510,138 536,125" stroke="#7c3aed" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="536" cy="125" r="4" fill="#7c3aed"/>
-        <circle cx="470" cy="132" r="3" fill="#7c3aed" fill-opacity=".6"/>
+        <polyline points="192,200 230,185 270,190 310,165 350,172 390,148 430,155 470,132 510,138 536,125" stroke="#ea580c" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="536" cy="125" r="4" fill="#ea580c"/>
+        <circle cx="470" cy="132" r="3" fill="#ea580c" fill-opacity=".6"/>
         <!-- Labels -->
         <text x="192" y="234" font-size="9" fill="rgba(255,255,255,.25)">Jan</text>
         <text x="230" y="234" font-size="9" fill="rgba(255,255,255,.25)">Feb</text>
@@ -463,8 +464,8 @@
         <rect x="568" y="104" width="272" height="200" rx="8" fill="rgba(255,255,255,.02)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
         <text x="584" y="124" font-size="11" font-weight="600" fill="rgba(255,255,255,.6)">AI Recommendations</text>
         <!-- Items -->
-        <rect x="580" y="134" width="244" height="38" rx="6" fill="rgba(124,58,237,.1)" stroke="rgba(124,58,237,.2)" stroke-width="1"/>
-        <circle cx="596" cy="153" r="5" fill="rgba(124,58,237,.6)"/>
+        <rect x="580" y="134" width="244" height="38" rx="6" fill="rgba(234,88,12,.1)" stroke="rgba(234,88,12,.2)" stroke-width="1"/>
+        <circle cx="596" cy="153" r="5" fill="rgba(234,88,12,.6)"/>
         <text x="608" y="148" font-size="10" font-weight="600" fill="rgba(255,255,255,.8)">Rightsize 3 EC2 instances</text>
         <text x="608" y="162" font-size="9" fill="rgba(255,255,255,.4)">Save ~$840/mo</text>
 
@@ -527,7 +528,7 @@
         <!-- UC 1 -->
         <div class="uc-card">
           <div class="uc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
             </svg>
           </div>
@@ -537,7 +538,7 @@
         <!-- UC 2 -->
         <div class="uc-card">
           <div class="uc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
           </div>
@@ -547,7 +548,7 @@
         <!-- UC 3 -->
         <div class="uc-card">
           <div class="uc-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
             </svg>
           </div>
@@ -570,42 +571,42 @@
       <div class="features-grid">
         <div class="feat-cell">
           <div class="feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
           </div>
           <h3>Cost Analytics</h3>
           <p>Real-time expense tracking across all cloud services with detailed breakdowns and trend analysis to spot waste instantly.</p>
         </div>
         <div class="feat-cell">
           <div class="feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           </div>
           <h3>Usage Insights</h3>
           <p>Daily resource utilization reports with rightsizing recommendations — know exactly what's running and what's wasted.</p>
         </div>
         <div class="feat-cell">
           <div class="feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
           </div>
           <h3>AI Predictions</h3>
           <p>Machine learning–powered forecasting for both spending and resource consumption — anticipate costs before they happen.</p>
         </div>
         <div class="feat-cell">
           <div class="feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           </div>
           <h3>Smart Recommendations</h3>
           <p>Algorithmic suggestions for rightsizing instances, purchasing reserved capacity, and eliminating orphaned resources.</p>
         </div>
         <div class="feat-cell">
           <div class="feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <h3>Security Monitoring</h3>
           <p>Continuous scanning for compliance violations and vulnerability exposure across your entire cloud infrastructure.</p>
         </div>
         <div class="feat-cell">
           <div class="feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           </div>
           <h3>Intelligent Alerts</h3>
           <p>Context-aware notifications for cost anomalies, security concerns, and optimization opportunities — delivered before damage is done.</p>
@@ -627,10 +628,10 @@
           <h3>Intelligent Cost Optimization</h3>
           <p>Reduce cloud spending by up to 40% through continuous analysis and AI-driven recommendations. Obzera identifies exactly where money is being wasted and tells you precisely how to fix it.</p>
           <ul class="solution-bullets">
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Real-time cost tracking across all services</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated rightsizing recommendations</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Reserved instance optimization</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Anomaly detection &amp; spend alerts</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Real-time cost tracking across all services</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated rightsizing recommendations</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Reserved instance optimization</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Anomaly detection &amp; spend alerts</li>
           </ul>
         </div>
         <div class="solution-visual">
@@ -639,31 +640,31 @@
             <text x="24" y="36" font-size="13" font-weight="700" fill="rgba(255,255,255,.7)">Cost Breakdown</text>
             <text x="24" y="54" font-size="11" fill="rgba(255,255,255,.3)">Current month • All services</text>
             <!-- Bars -->
-            <rect x="24" y="80" width="50" height="160" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.35)" stroke-width="1"/>
-            <rect x="24" y="120" width="50" height="120" rx="4" fill="rgba(124,58,237,.6)"/>
+            <rect x="24" y="80" width="50" height="160" rx="4" fill="rgba(234,88,12,.2)" stroke="rgba(234,88,12,.35)" stroke-width="1"/>
+            <rect x="24" y="120" width="50" height="120" rx="4" fill="rgba(234,88,12,.6)"/>
             <text x="49" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">EC2</text>
 
-            <rect x="88" y="100" width="50" height="140" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
-            <rect x="88" y="150" width="50" height="90" rx="4" fill="rgba(124,58,237,.45)"/>
+            <rect x="88" y="100" width="50" height="140" rx="4" fill="rgba(234,88,12,.2)" stroke="rgba(234,88,12,.3)" stroke-width="1"/>
+            <rect x="88" y="150" width="50" height="90" rx="4" fill="rgba(234,88,12,.45)"/>
             <text x="113" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">RDS</text>
 
-            <rect x="152" y="130" width="50" height="110" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.25)" stroke-width="1"/>
-            <rect x="152" y="175" width="50" height="65" rx="4" fill="rgba(124,58,237,.35)"/>
+            <rect x="152" y="130" width="50" height="110" rx="4" fill="rgba(234,88,12,.2)" stroke="rgba(234,88,12,.25)" stroke-width="1"/>
+            <rect x="152" y="175" width="50" height="65" rx="4" fill="rgba(234,88,12,.35)"/>
             <text x="177" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">S3</text>
 
-            <rect x="216" y="155" width="50" height="85" rx="4" fill="rgba(124,58,237,.15)" stroke="rgba(124,58,237,.2)" stroke-width="1"/>
-            <rect x="216" y="190" width="50" height="50" rx="4" fill="rgba(124,58,237,.25)"/>
+            <rect x="216" y="155" width="50" height="85" rx="4" fill="rgba(234,88,12,.15)" stroke="rgba(234,88,12,.2)" stroke-width="1"/>
+            <rect x="216" y="190" width="50" height="50" rx="4" fill="rgba(234,88,12,.25)"/>
             <text x="241" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">Lambda</text>
 
-            <rect x="280" y="170" width="50" height="70" rx="4" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.18)" stroke-width="1"/>
-            <rect x="280" y="205" width="50" height="35" rx="4" fill="rgba(124,58,237,.2)"/>
+            <rect x="280" y="170" width="50" height="70" rx="4" fill="rgba(234,88,12,.12)" stroke="rgba(234,88,12,.18)" stroke-width="1"/>
+            <rect x="280" y="205" width="50" height="35" rx="4" fill="rgba(234,88,12,.2)"/>
             <text x="305" y="260" font-size="9" fill="rgba(255,255,255,.3)" text-anchor="middle">CloudFront</text>
 
             <!-- Savings callout -->
-            <rect x="348" y="72" width="112" height="90" rx="8" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+            <rect x="348" y="72" width="112" height="90" rx="8" fill="rgba(234,88,12,.12)" stroke="rgba(234,88,12,.3)" stroke-width="1"/>
             <text x="404" y="94" font-size="10" fill="rgba(255,255,255,.4)" text-anchor="middle">POTENTIAL SAVINGS</text>
-            <text x="404" y="120" font-size="24" font-weight="800" fill="#7c3aed" text-anchor="middle">$5.6K</text>
-            <text x="404" y="138" font-size="10" fill="rgba(124,58,237,.8)" text-anchor="middle">per month</text>
+            <text x="404" y="120" font-size="24" font-weight="800" fill="#ea580c" text-anchor="middle">$5.6K</text>
+            <text x="404" y="138" font-size="10" fill="rgba(234,88,12,.8)" text-anchor="middle">per month</text>
 
             <rect x="348" y="176" width="112" height="44" rx="6" fill="rgba(34,197,94,.08)" stroke="rgba(34,197,94,.25)" stroke-width="1"/>
             <text x="404" y="200" font-size="11" font-weight="600" fill="rgba(34,197,94,.9)" text-anchor="middle">40% Reduction</text>
@@ -679,10 +680,10 @@
           <h3>Resource Usage Analytics</h3>
           <p>Gain deep visibility into utilization patterns across your entire infrastructure. Identify underutilized assets, forecast capacity needs, and make data-driven decisions about resource allocation.</p>
           <ul class="solution-bullets">
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Deep utilization pattern insights</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Identify underutilized &amp; idle assets</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Capacity forecasting &amp; trend reports</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Performance optimization data</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Deep utilization pattern insights</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Identify underutilized &amp; idle assets</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Capacity forecasting &amp; trend reports</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Performance optimization data</li>
           </ul>
         </div>
         <div class="solution-visual">
@@ -693,22 +694,22 @@
             <!-- Line chart -->
             <defs>
               <linearGradient id="grad2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#7c3aed" stop-opacity=".25"/>
-                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+                <stop offset="0%" stop-color="#ea580c" stop-opacity=".25"/>
+                <stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
               </linearGradient>
             </defs>
             <polygon points="24,240 64,200 104,210 144,175 184,180 224,155 264,160 304,140 344,145 384,125 424,130 456,115 456,260 24,260" fill="url(#grad2)"/>
-            <polyline points="24,240 64,200 104,210 144,175 184,180 224,155 264,160 304,140 344,145 384,125 424,130 456,115" stroke="#7c3aed" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="24,240 64,200 104,210 144,175 184,180 224,155 264,160 304,140 344,145 384,125 424,130 456,115" stroke="#ea580c" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             <!-- Dashed forecast -->
-            <polyline points="384,125 424,110 456,95" stroke="rgba(124,58,237,.4)" stroke-width="2" fill="none" stroke-dasharray="5 4" stroke-linecap="round"/>
+            <polyline points="384,125 424,110 456,95" stroke="rgba(234,88,12,.4)" stroke-width="2" fill="none" stroke-dasharray="5 4" stroke-linecap="round"/>
 
             <!-- Idle badge -->
             <rect x="200" y="72" width="136" height="52" rx="8" fill="rgba(245,158,11,.1)" stroke="rgba(245,158,11,.3)" stroke-width="1"/>
             <text x="268" y="94" font-size="10" fill="rgba(245,158,11,.7)" text-anchor="middle">IDLE RESOURCES</text>
             <text x="268" y="114" font-size="20" font-weight="800" fill="#f59e0b" text-anchor="middle">12 instances</text>
 
-            <circle cx="304" cy="140" r="5" fill="#7c3aed"/>
-            <rect x="312" y="126" width="100" height="28" rx="4" fill="rgba(124,58,237,.2)" stroke="rgba(124,58,237,.3)" stroke-width="1"/>
+            <circle cx="304" cy="140" r="5" fill="#ea580c"/>
+            <rect x="312" y="126" width="100" height="28" rx="4" fill="rgba(234,88,12,.2)" stroke="rgba(234,88,12,.3)" stroke-width="1"/>
             <text x="362" y="143" font-size="9" fill="rgba(255,255,255,.7)" text-anchor="middle">Save $1.2K/mo here</text>
           </svg>
         </div>
@@ -721,10 +722,10 @@
           <h3>Security &amp; Compliance Monitoring</h3>
           <p>Maintain a strong security posture with continuous scanning, automated compliance documentation, and proactive vulnerability notifications across your entire cloud footprint.</p>
           <ul class="solution-bullets">
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Continuous security posture monitoring</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated compliance documentation</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vulnerability assessments &amp; scoring</li>
-            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Proactive security notifications</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Continuous security posture monitoring</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Automated compliance documentation</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Vulnerability assessments &amp; scoring</li>
+            <li><div class="bullet-dot"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.5 1.5 3-3" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Proactive security notifications</li>
           </ul>
         </div>
         <div class="solution-visual">
@@ -757,8 +758,8 @@
             <circle cx="204" cy="216" r="5" fill="rgba(239,68,68,.7)"/>
             <text x="216" y="220" font-size="10" fill="rgba(255,255,255,.7)">Public S3 Buckets — 2 Found</text>
 
-            <rect x="192" y="236" width="248" height="24" rx="4" fill="rgba(124,58,237,.1)"/>
-            <text x="316" y="252" font-size="10" fill="rgba(124,58,237,.9)" text-anchor="middle">View Full Report →</text>
+            <rect x="192" y="236" width="248" height="24" rx="4" fill="rgba(234,88,12,.1)"/>
+            <text x="316" y="252" font-size="10" fill="rgba(234,88,12,.9)" text-anchor="middle">View Full Report →</text>
           </svg>
         </div>
       </div>
@@ -835,7 +836,7 @@
 
   <!-- CTA BAND -->
   <div class="cta-band">
-    <div class="glow-blob" style="width:400px;height:300px;background:rgba(124,58,237,.25);top:-80px;left:50%;transform:translateX(-50%)"></div>
+    <div class="glow-blob" style="width:400px;height:300px;background:rgba(234,88,12,.25);top:-80px;left:50%;transform:translateX(-50%)"></div>
     <h2>Ready to optimize your cloud costs?</h2>
     <p>Join teams using Obzera to reduce cloud spending and improve resource efficiency.</p>
     <div>
@@ -904,5 +905,6 @@
       </div>
     </div>
   </footer>
+  <script src="hamburger.js"></script>
 </body>
 </html>
